@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+
+  eventus-api:
+    build:
+      context: services/api
+      dockerfile: Dockerfile
+    ports:
+      - 3042:3042
+    volumes:
+      - ./services/api:/app
