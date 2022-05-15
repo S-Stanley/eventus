@@ -11,7 +11,7 @@ app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-mongoose.connect(process.env.MONGO_URI).then(() => {
+mongoose.connect(process.env.MONGO_URI ?? 'mongodb://127.0.0.1:27017/').then(() => {
     console.log('Mongoose connected');
 });
 
