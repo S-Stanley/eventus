@@ -6,12 +6,17 @@ const chance = require('chance');
 const random = new chance();
 
 describe("/users", () => {
-    describe("POST /users", () => {
-        it('return an err 500 (missing parameters)', async function () {
+    afterEach((done) => {
+        done();
+    });
+    describe("POST /users err", () => {
+        it('return an err 422 (missing parameters)', async function () {
             const res = await agent(server)
                 .post('/users');
             expect(res.status).to.equal(422);
         });
+    });
+    describe("POST /users success", () => {
         it('return a HTTP 201 created', async function () {
             const email = random.email();
             const pass = random.name();
