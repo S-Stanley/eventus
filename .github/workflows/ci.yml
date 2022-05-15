@@ -1,0 +1,22 @@
+name: CI
+on: [pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: build services
+        run: bash scripts/run-prod.sh
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: build services
+        run: |
+          cd services/api/
+          npm i
+          cd -
+          npm i -g ts-node
+          bash scripts/run-prod.sh
+          docker stop eventus_eventus-api_1
+          bash scripts/run-test-api.sh

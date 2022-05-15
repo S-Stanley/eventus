@@ -7,7 +7,6 @@
     "start": "npx nodemon server.ts",
     "build": "tsc",
     "test": "mocha -r ts-node/register test/**/*.test.ts --exit",
-    "test-dev": "nodemon --watch . --ext ts --exec \"mocha -r ts-node/register test/**/*.test.ts\"",
     "prod": "node build/server.js"
   },
   "keywords": [],
