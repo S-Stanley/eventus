@@ -1,6 +1,6 @@
 import Schema from "../schema/Schema";
 import InterfaceUsers from "../../Interfaces/User";
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const saltRounds = 10;
 
 const create_users = async(email: string, password: string, name: string, firstname: string, location: string): Promise<InterfaceUsers | boolean> => {

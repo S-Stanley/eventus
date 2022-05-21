@@ -19,7 +19,8 @@ mongoose.connect(process.env.MONGO_URI ?? 'mongodb://127.0.0.1:27017/').then(() 
     console.log('Mongoose connected');
 });
 
-app.use('/users', require('./routes/Users'))
+app.use('/users', require('./routes/Users'));
+app.use('/activities', require('./routes/Activities'));
 
 app.get('/ping', (req, res) => {
     res.status(200).json('Api is running');
