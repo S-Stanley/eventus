@@ -24,7 +24,13 @@ const createActivity = async (name: string): Promise<ActivitiesInterface> => {
     return (activity_created);
 }
 
+const findAllActivities = async (page: number, per_page: number): Promise<ActivitiesInterface[]> => {
+    const activites = await Schema.Activities.find().skip(per_page * (page - 1)).limit(per_page);
+    return (activites);
+}
+
 export default {
     findActivityByName,
     createActivity,
+    findAllActivities,
 }

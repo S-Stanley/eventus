@@ -35,5 +35,11 @@ describe('/activites', () => {
             let res = await agent(server).post('/activities')
             expect(res.status).to.equal(422);
         })
-    })
+    });
+    describe("GET /activities", () => {
+        it('Should return a 200', async () => {
+            let req = await agent(server).get('/activities');
+            expect(req.status).to.equal(200);
+        })
+    });
 })
