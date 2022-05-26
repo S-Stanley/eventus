@@ -1,12 +1,11 @@
 export {};
 const express = require('express');
+const swaggerAutogen = require('swagger-autogen')();
 
 const router = express.Router();
 
 import Helpers from "../database/helpers/Helpers";
 import Utils from '../utils/Utils'
-
-const swaggerAutogen = require('swagger-autogen')();
 
 router.post('/', async(req : { body: { email: string, password: string, name: string, firstname: string, location: string} }, res) => {
     try {
