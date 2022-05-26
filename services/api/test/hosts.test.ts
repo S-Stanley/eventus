@@ -81,4 +81,11 @@ describe('/hosts', () => {
             expect(req['_id']).to.exist;
         });
     });
+
+    describe('GET /hosts', () => {
+        it('shoud return 200', async () => {
+            const req = await agent(server).get('/hosts');
+            expect(req.status).to.equal(200);
+        })
+    });
 });

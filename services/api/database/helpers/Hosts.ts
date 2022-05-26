@@ -1,4 +1,5 @@
 import Schema from "../schema/Schema";
+import HostInterface from '../../Interfaces/Hosts';
 
 const create_host = async (
     name: string,
@@ -9,7 +10,7 @@ const create_host = async (
     address: string,
     metro: string,
     station: string,
-) => {
+): Promise<HostInterface> => {
     const host = await new Schema.Hosts({
         name: name,
         website: website,
@@ -24,6 +25,15 @@ const create_host = async (
     return (host);
 }
 
+const get_all_host = async(page: number, per_page: number): Promise<HostInterface> => {
+    const all_hosts = await Schema.Hosts
+        .find()
+        .limit(per_page)
+        .skip((page - 1) * per_page);
+    return (all_hosts);
+}
+
 export default {
     create_host,
+    get_all_host,
 }
