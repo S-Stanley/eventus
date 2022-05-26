@@ -9,3 +9,5 @@ interface HostInterface {
     station: string,
     created_at: Date,
 }
+
+export default HostInterface;
