@@ -76,6 +76,20 @@ router.post('/activity', async (req, res) => {
     }
 });
 
+router.get('/:host_id/activity', async (req, res) => {
+    try {
+        if (!ObjectId.isValid(req.params.host_id)){
+            res.status(422).json('Id is not in the correct format');
+        } else {
+            const all_activities = await Helpers.HostActivityRelations.get_all_activities_by_host_id(req.params.host_id);
+            res.status(200).json(all_activities);
+        }
+    } catch (e) {
+        console.error(e);
+        res.status(403).json('There was an error fron our side, please try again later');
+    }
+});
+
 router.get('/:host_id', async (req, res) => {
     try {
         if (!ObjectId.isValid(req.params.host_id)){
