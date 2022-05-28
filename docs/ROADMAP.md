@@ -6,3 +6,4 @@
 1. Possibility to see every person going to an event.
 1. Internal messagerie
 1. Internal messagerie for event
+1. Event upfront payment
