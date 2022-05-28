@@ -6,4 +6,5 @@
 1. Possibility to see every person going to an event.
 1. Internal messagerie
 1. Internal messagerie for event
+1. Allow host to create an "host account" to add their place and get somes statistics
 1. Event upfront payment
