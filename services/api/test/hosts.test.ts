@@ -81,14 +81,12 @@ describe('/hosts', () => {
             expect(req['_id']).to.exist;
         });
     });
-
     describe('GET /hosts', () => {
         it('shoud return 200', async () => {
             const req = await agent(server).get('/hosts');
             expect(req.status).to.equal(200);
         });
     });
-
     describe('GET /hosts/:host_id', () => {
         it('Should return a 422 wrong format', async() => {
             const req = await agent(server).get('/hosts/wrongFormatId');
@@ -124,6 +122,16 @@ describe('/hosts', () => {
             expect(req.status).to.equal(400);
             const response_json = JSON.parse(req.text);
             expect(response_json['error']).to.equal('The host or the activity do not exist');
+        });
+    });
+    describe('GET /hosts/:host_id/activitiy', () => {
+        it('Should return 422 id uncorrect format', async() => {
+            const req = await agent(server).get('/hosts/idWrongFormat/activity');
+            expect(req.status).to.equal(422);
+        });
+        it('Should return 200', async() => {
+            const req = await agent(server).get('/hosts/628f89055163beb4f6233c52/activity');
+            expect(req.status).to.equal(200);
         });
     });
 });
