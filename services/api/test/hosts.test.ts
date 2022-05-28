@@ -86,6 +86,18 @@ describe('/hosts', () => {
         it('shoud return 200', async () => {
             const req = await agent(server).get('/hosts');
             expect(req.status).to.equal(200);
-        })
+        });
+    });
+
+    describe('GET /hosts/:host_id', () => {
+        it('Should return a 422 wrong format', async() => {
+            const req = await agent(server).get('/hosts/wrongFormatId');
+            expect(req.status).to.equal(422);
+        });
+        it('Should return a 200', async () => {
+            const req = await agent(server).get('/hosts/628f89055163beb4f6233c52');
+            const body_json = JSON.parse(req.text);
+            expect(req.status).to.equal(200);
+        });
     });
 });
