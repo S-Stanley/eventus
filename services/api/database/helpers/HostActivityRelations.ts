@@ -1,0 +1,28 @@
+import ActivitiesInterface from "../../Interfaces/Activities";
+import HostActivityRelationInterface from "../../Interfaces/HostActivityRelations";
+import Schema from "../schema/Schema";
+
+const create_relation = async(host_id: string, activity_id: string): Promise<HostActivityRelationInterface> => {
+    const relation_find = find_relation(host_id, activity_id)
+    if (relation_find){
+        return (relation_find);
+    }
+    const relation_created = await new Schema.HostActivityRelation({
+        host_id: host_id,
+        activity_id: activity_id,
+    }).save();
+    return (relation_created);
+}
+
+const find_relation = async (host_id: string, activity_id: string): Promise<HostActivityRelationInterface> => {
+    const relation_to_find = await Schema.HostActivityRelation.findOne({
+        host_id: host_id,
+        activity_id: activity_id,
+    });
+    return (relation_to_find);
+}
+
+export default {
+    create_relation,
+    find_relation,
+}

@@ -29,8 +29,16 @@ const findAllActivities = async (page: number, per_page: number): Promise<Activi
     return (activites);
 }
 
+const find_activity_by_id = async (activity_id: string): Promise<ActivitiesInterface> => {
+    const activity_to_find = await Schema.Activities.findOne({
+        _id: activity_id,
+    });
+    return (activity_to_find);
+}
+
 export default {
     findActivityByName,
     createActivity,
     findAllActivities,
+    find_activity_by_id,
 }

@@ -45,6 +45,37 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.post('/activity', async (req, res) => {
+    try {
+        if (!Utils.Requests.verifParams(req.body, ['host_id', 'activity_id'])){
+            res.status(422).json({
+                error: 'Missing parameter',
+            })
+        } else {
+            if (!ObjectId.isValid(req.body.host_id) || !ObjectId.isValid(req.body.activity_id)){
+                res.status(422).json({
+                    error: 'One of the parameter is not in the correct format',
+                });
+            } else {
+                const host = await Helpers.Hosts.get_host_by_id(req.body.host_id);
+                const activity = await Helpers.Activities.find_activity_by_id(req.body.activity_id);
+                if (!host || !activity) {
+                    res.status(400).json({
+                        error: 'The host or the activity do not exist',
+                    });
+                }
+                else {
+                    const relation_created = await Helpers.HostActivityRelations.create_relation(req.body.host_id, req.body.activity_id) ?? {};
+                    res.status(201).json(relation_created);
+                }
+            }
+        }
+    } catch (e) {
+        console.error(e);
+        res.status(403).json('There was an error fron our side, please try again later');
+    }
+});
+
 router.get('/:host_id', async (req, res) => {
     try {
         if (!ObjectId.isValid(req.params.host_id)){

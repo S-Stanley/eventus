@@ -100,4 +100,30 @@ describe('/hosts', () => {
             expect(req.status).to.equal(200);
         });
     });
+    describe('POST /hosts/activity', () => {
+        it('Should return a 422 not enouth parameters', async () => {
+            const req = await agent(server).post('/hosts/activity');
+            expect(req.status).to.equal(422);
+            const response_json = JSON.parse(req.text);
+            expect(response_json['error']).to.equal('Missing parameter');
+        });
+        it('Should return a 422 wrong format id', async () => {
+            const req = await agent(server).post('/hosts/activity').send({
+                host_id: 'wrong format id',
+                activity_id: 'wrong format id too',
+            });
+            expect(req.status).to.equal(422);
+            const response_json = JSON.parse(req.text);
+            expect(response_json['error']).to.equal('One of the parameter is not in the correct format');
+        });
+        it('Should return a 400 host or activity do no exist', async () => {
+            const req = await agent(server).post('/hosts/activity').send({
+                host_id: '628f89055163beb4f6233c52',
+                activity_id: '628f89055163beb4f6233c52',
+            });
+            expect(req.status).to.equal(400);
+            const response_json = JSON.parse(req.text);
+            expect(response_json['error']).to.equal('The host or the activity do not exist');
+        });
+    });
 });
