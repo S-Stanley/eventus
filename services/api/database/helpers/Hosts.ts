@@ -33,7 +33,15 @@ const get_all_host = async(page: number, per_page: number): Promise<HostInterfac
     return (all_hosts);
 }
 
+const get_host_by_id = async(host_id: string): Promise<HostInterface> => {
+    const host = await Schema.Hosts.findOne({
+        '_id': host_id,
+    });
+    return (host);
+}
+
 export default {
     create_host,
     get_all_host,
+    get_host_by_id,
 }
