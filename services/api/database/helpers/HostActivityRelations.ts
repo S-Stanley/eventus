@@ -29,8 +29,16 @@ const get_all_activities_by_host_id = async(host_id: string): Promise<HostActivi
     return (all_activities);
 }
 
+const get_all_hosts_by_activity_id = async (activity_id: string): Promise<HostActivityRelationInterface> => {
+    const all_hosts = await Schema.HostActivityRelation.find({
+        activity_id: activity_id,
+    });
+    return (all_hosts);
+}
+
 export default {
     create_relation,
     find_relation,
     get_all_activities_by_host_id,
+    get_all_hosts_by_activity_id,
 }
