@@ -160,4 +160,28 @@ describe('/hosts', () => {
             expect(response_json['error']).to.equal('This host do not exist');
         });
     });
+    describe('DELETE /hosts/activity', () => {
+        it('Should return a 422 missing parameter', async () => {
+            const req = await agent(server).delete('/hosts/activity');
+            expect(req.status).to.equal(422);
+            const response_json = JSON.parse(req.text);
+            expect(response_json['error']).to.equal('Missing parameter');
+        });
+        it('Should return a 422 incorrect format', async () => {
+            const req = await agent(server).delete('/hosts/activity').send({
+                relation_id: 'idWrongFormat',
+            });
+            expect(req.status).to.equal(422);
+            const response_json = JSON.parse(req.text);
+            expect(response_json['error']).to.equal('Parameter is not in the correct format');
+        });
+        it('Should return a 400 unknow relation', async () => {
+            const req = await agent(server).delete('/hosts/activity').send({
+                relation_id: '628f89055263beb4f6133c52',
+            });
+            expect(req.status).to.equal(400);
+            const response_json = JSON.parse(req.text);
+            expect(response_json['error']).to.equal('Error while trying to delete this activity from this host');
+        });
+    });
 });
