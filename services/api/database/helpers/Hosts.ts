@@ -40,8 +40,27 @@ const get_host_by_id = async(host_id: string): Promise<HostInterface> => {
     return (host);
 }
 
+const update_host = async (host_id: string, new_host: HostInterface) => {
+    const host_updated = await Schema.Hosts.findOneAndUpdate({
+        _id: host_id
+    }, {
+        name: new_host.name,
+        website: new_host.website,
+        address: new_host.address,
+        location: new_host.location,
+        tel: new_host.tel,
+        email: new_host.email,
+        metro: new_host.metro,
+        station: new_host.station,
+    }, {
+        new: true,
+    });
+    return (host_updated);
+};
+
 export default {
     create_host,
     get_all_host,
     get_host_by_id,
+    update_host,
 }

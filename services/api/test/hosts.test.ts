@@ -134,4 +134,30 @@ describe('/hosts', () => {
             expect(req.status).to.equal(200);
         });
     });
+    describe('PATCH /hosts', () => {
+        it('Should return a 422 missing parameter', async () => {
+            const req = await agent(server).patch('/hosts');
+            expect(req.status).to.equal(422);
+            const response_json = JSON.parse(req.text);
+            expect(response_json['error']).to.equal('Missing parameter');
+        });
+        it('Should return a 422 wrong host_id format', async () => {
+            const req = await agent(server).patch('/hosts').send({
+                host_id: 'wrontFormatId',
+                name: 'new_name',
+            });
+            expect(req.status).to.equal(422);
+            const response_json = JSON.parse(req.text);
+            expect(response_json['error']).to.equal('Host_id is not in the correct format');
+        });
+        it('Should return a 422 wrong host_id format', async () => {
+            const req = await agent(server).patch('/hosts').send({
+                host_id: '628f89055263beb4f6233c52',
+                name: 'new_name',
+            });
+            expect(req.status).to.equal(422);
+            const response_json = JSON.parse(req.text);
+            expect(response_json['error']).to.equal('This host do not exist');
+        });
+    });
 });

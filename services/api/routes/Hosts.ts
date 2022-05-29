@@ -104,4 +104,52 @@ router.get('/:host_id', async (req, res) => {
     }
 });
 
+router.patch('/', async (req, res) => {
+    try {
+        if (!Utils.Requests.verifParams(req.body, ['host_id'])){
+            res.status(422).json({
+                error: 'Missing parameter',
+            });
+        } else if (!ObjectId.isValid(req.body.host_id)){
+            res.status(422).json({
+                error: 'Host_id is not in the correct format',
+            })
+        } else {
+            let new_host = await Helpers.Hosts.get_host_by_id(req.body.host_id);
+            if (!new_host) {
+                res.status(422).json({
+                    error: 'This host do not exist',
+                })
+            } else {
+                if (Object.keys(req.body).includes('name')){
+                    new_host.name = req.body.name;
+                }
+                if (Object.keys(req.body).includes('website')){
+                    new_host.website = req.body.website;
+                }
+                if (Object.keys(req.body).includes('location')){
+                    new_host.location = req.body.location;
+                }
+                if (Object.keys(req.body).includes('tel')){
+                    new_host.tel = req.body.tel;
+                }
+                if (Object.keys(req.body).includes('email')){
+                    new_host.email = req.body.email;
+                }
+                if (Object.keys(req.body).includes('metro')){
+                    new_host.metro = req.body.metro;
+                }
+                if (Object.keys(req.body).includes('station')){
+                    new_host.station = req.body.station;
+                }
+                let host_updated = await Helpers.Hosts.update_host(req.body.host_id, new_host);
+                res.status(200).json(host_updated);
+            }
+        }
+    } catch (e) {
+        console.error(e);
+        res.status(403).json('There was an error fron our side, please try again later');
+    }
+});
+
 module.exports = router;
