@@ -50,7 +50,7 @@ router.post('/activity', async (req, res) => {
         if (!Utils.Requests.verifParams(req.body, ['host_id', 'activity_id'])){
             res.status(422).json({
                 error: 'Missing parameter',
-            })
+            });
         } else {
             if (!ObjectId.isValid(req.body.host_id) || !ObjectId.isValid(req.body.activity_id)){
                 res.status(422).json({
@@ -65,7 +65,7 @@ router.post('/activity', async (req, res) => {
                     });
                 }
                 else {
-                    const relation_created = await Helpers.HostActivityRelations.create_relation(req.body.host_id, req.body.activity_id) ?? {};
+                    const relation_created = await Helpers.HostActivityRelations.create_relation(req.body.host_id, req.body.activity_id);
                     res.status(201).json(relation_created);
                 }
             }
@@ -83,6 +83,34 @@ router.get('/:host_id/activity', async (req, res) => {
         } else {
             const all_activities = await Helpers.HostActivityRelations.get_all_activities_by_host_id(req.params.host_id);
             res.status(200).json(all_activities);
+        }
+    } catch (e) {
+        console.error(e);
+        res.status(403).json('There was an error fron our side, please try again later');
+    }
+});
+
+router.delete('/activity', async (req, res) => {
+    try {
+        if (!Utils.Requests.verifParams(req.body, ['relation_id'])){
+            res.status(422).json({
+                error: 'Missing parameter',
+            });
+        } else {
+            if (!ObjectId.isValid(req.body.relation_id)){
+                res.status(422).json({
+                    error: 'Parameter is not in the correct format',
+                });
+            } else {
+                const activity_deleted = await Helpers.HostActivityRelations.delete_activity_by_relation_id(req.body.relation_id);
+                if (!activity_deleted) {
+                    res.status(400).json({
+                        error: 'Error while trying to delete this activity from this host',
+                    });
+                } else {
+                    res.status(201).json(activity_deleted);
+                }
+            }
         }
     } catch (e) {
         console.error(e);
