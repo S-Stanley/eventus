@@ -46,7 +46,47 @@ router.post('/', async (req, res) => {
             }
         }
     } catch (e) {
-        console.log(e);
+        console.error(e);
+        res.status(403).json({
+            error: 'There was an error fron our side, please try again later',
+        });
+    }
+});
+
+router.get('/', async (req, res) => {
+    try {
+        const page = parseInt(req.query.page, 10) || 1;
+        const per_page = parseInt(req.query.per_page, 10) || 10;
+        const all_events = await Helpers.Events.get_all_events(page, per_page) ?? [];
+        if (!all_events) {
+            res.status(403).json({
+                error: 'Could not process your request, please check your parameters',
+            });
+        } else {
+            res.status(200).json(all_events);
+        }
+    } catch (e) {
+        console.error(e);
+        res.status(403).json({
+            error: 'There was an error fron our side, please try again later',
+        });
+    }
+});
+
+router.get('/:event_id', async (req, res) => {
+    try {
+        const event_id = req.params.event_id || '';
+        const event_found = await Helpers.Events.get_event_by_id(event_id);
+        if (!event_found) {
+            console.error(event_found)
+            res.status(400).json({
+                error: "Cannot found this event",
+            });
+        } else {
+            res.status(200).json(event_found);
+        }
+    } catch (e) {
+        console.error(e);
         res.status(403).json({
             error: 'There was an error fron our side, please try again later',
         });
