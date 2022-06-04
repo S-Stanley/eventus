@@ -58,7 +58,28 @@ const create_event = async(
     return (event_created);
 }
 
+const get_all_events = async (page: number = 1, per_page: number = 10): Promise<EventInterface[] | boolean> => {
+    if (page < 1 || per_page < 1) {
+        return (false);
+    }
+    const all_events = await Schema.Events.find().skip((page - 1) * per_page).limit(per_page);
+    return (all_events);
+}
+
+const get_event_by_id = async (event_id: string): Promise<EventInterface | boolean> => {
+    if (!ObjectId.isValid(event_id)) {
+        console.error('Event_id is invalid');
+        return (false);
+    }
+    const event_found = await Schema.Events.findOne({
+        _id: event_id,
+    });
+    return (event_found);
+}
+
 export default {
     create_event,
     find_event_by_datetime_and_created_by,
+    get_all_events,
+    get_event_by_id,
 }
