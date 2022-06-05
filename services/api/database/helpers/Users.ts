@@ -25,6 +25,14 @@ const create_users = async(email: string, password: string, name: string, firstn
     }
 }
 
+const find_user_by_email = async(email: string) => {
+    const user_to_find = await Schema.Users.findOne({
+        email: email,
+    });
+    return (user_to_find);
+}
+
 export default {
     create_users,
+    find_user_by_email,
 }
