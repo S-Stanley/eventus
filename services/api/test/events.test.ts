@@ -25,9 +25,9 @@ describe('/events', () => {
                 maximal_number_of_participantsid: '25',
                 created_by: '',
             });
-            expect(res.status).to.equal(403);
+            expect(res.status).to.equal(422);
             const response_json = JSON.parse(res.text);
-            expect(response_json['error']).to.equal('This host do not propose this activity');
+            expect(response_json['error']).to.equal('Missing parameter');
         });
     });
     describe('GET /events', () => {

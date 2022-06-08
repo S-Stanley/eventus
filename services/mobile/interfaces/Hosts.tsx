@@ -1,4 +1,4 @@
-interface HostInterface {
+interface Hosts {
     _id: string,
     picture: string,
     name: string,
@@ -12,4 +12,4 @@ interface HostInterface {
     created_at: Date,
 }
 
-export default HostInterface;
+export default Hosts;

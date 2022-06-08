@@ -3,8 +3,10 @@ import Utils from "../../utils/Utils";
 import Schema from "../schema/Schema";
 const ObjectId = require('mongoose').Types.ObjectId;
 
-const find_event_by_datetime_and_created_by = async (host_id: string, activity_id: string, date_event: string, time_event:string, created_by: string): Promise<EventInterface> => {
+const find_event_by_datetime_and_created_by = async (name: string, picture: string, host_id: string, activity_id: string, date_event: string, time_event:string, created_by: string): Promise<EventInterface> => {
     const event_to_find = await Schema.Events.findOne({
+        name: name,
+        picture: picture,
         host_id: host_id,
         activity_id: activity_id,
         date_event: date_event,
@@ -15,6 +17,8 @@ const find_event_by_datetime_and_created_by = async (host_id: string, activity_i
 }
 
 const create_event = async(
+    name: string,
+    picture: string,
     host_id: string,
     activity_id: string,
     date_event: string,
@@ -45,6 +49,8 @@ const create_event = async(
         return (false);
     }
     const event_created = await new Schema.Events({
+        name: name,
+        picture: picture,
         host_id: host_id,
         activity_id: activity_id,
         date_event: date_event,
@@ -62,7 +68,7 @@ const get_all_events = async (page: number = 1, per_page: number = 10): Promise<
     if (page < 1 || per_page < 1) {
         return (false);
     }
-    const all_events = await Schema.Events.find().skip((page - 1) * per_page).limit(per_page);
+    const all_events = await Schema.Events.find().skip((page - 1) * per_page).limit(per_page).lean();
     return (all_events);
 }
 
