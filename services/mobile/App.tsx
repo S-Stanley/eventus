@@ -14,7 +14,12 @@ import {
 } from '@react-native-google-signin/google-signin';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { IOS_GOOGLE_CLIENT_ID } from 'react-native-dotenv';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
 import Helpers from './Helpers/Helpers';
+import EventListPage from './pages/Events/List';
+
 
 interface GoogleAuthResponseInterface {
     idToken: string,
@@ -34,23 +39,33 @@ GoogleSignin.configure({
     iosClientId: IOS_GOOGLE_CLIENT_ID
 });
 
-const styles = StyleSheet.create({
-    title: {
-        fontSize: 20,
-    },
-    page: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        flex: 1,
-    },
-    section: {
-        margin: 20,
-    }
-  });
+function SettingsScreen(props) {
+    return (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <Text onPress={props.logout}>Clique here to logout</Text>
+        </View>
+    );
+}
 
-const App = () => {
+const Tab = createBottomTabNavigator();
+
+export default function App() {
 
     const [logged, setLogged] = useState<boolean>(false);
+
+    const styles = StyleSheet.create({
+        title: {
+            fontSize: 20,
+        },
+        page: {
+            alignItems: 'center',
+            justifyContent: 'center',
+            flex: 1,
+        },
+        section: {
+            margin: 20,
+        }
+    });
 
     const signIn = async () => {
         try {
@@ -78,8 +93,14 @@ const App = () => {
         }
     };
 
-    if (!logged){
-        return (
+    return (
+        <NavigationContainer>
+            { logged ? (
+            <Tab.Navigator>
+                <Tab.Screen name="Home" component={EventListPage} />
+                <Tab.Screen name="Settings" children={() => <SettingsScreen logout={() => setLogged(false)} />} />
+            </Tab.Navigator>
+            ) : (
             <View style={styles.page}>
                 <View style={styles.section}>
                     <Text style={styles.title}>Welcome to Eventus!</Text>
@@ -93,19 +114,7 @@ const App = () => {
                     />
                 </View>
             </View>
-        )
-    }
-
-    return (
-        <SafeAreaView>
-            <ScrollView>
-                <View>
-                    <Text>Connected</Text>
-                    <Text onPress={() => setLogged(false)}>Logout</Text>
-                </View>
-            </ScrollView>
-        </SafeAreaView>
+            )}
+        </NavigationContainer>
     );
-};
-
-export default App;
+}

@@ -8,7 +8,7 @@ import Utils from '../utils/Utils';
 
 router.post('/', async (req, res) => {
     try {
-        if (!Utils.Requests.verifParams(req.body, ['host_id', 'activity_id', 'date_event', 'time_event', 'description', 'minimal_number_of_participants', 'maximal_number_of_participantsid', 'created_by'])){
+        if (!Utils.Requests.verifParams(req.body, ['name', 'picture', 'host_id', 'activity_id', 'date_event', 'time_event', 'description', 'minimal_number_of_participants', 'maximal_number_of_participantsid', 'created_by'])){
             res.status(422).json({
                 error: 'Missing parameter',
             })
@@ -19,13 +19,23 @@ router.post('/', async (req, res) => {
                     error: 'This host do not propose this activity',
                 })
             } else {
-                const find_event = await Helpers.Events.find_event_by_datetime_and_created_by(req.body.host_id, req.body.activity_id, req.body.date_event, req.body.time_event, req.body.created_by);
+                const find_event = await Helpers.Events.find_event_by_datetime_and_created_by(
+                    req.body.name,
+                    req.body.picture,
+                    req.body.host_id,
+                    req.body.activity_id,
+                    req.body.date_event,
+                    req.body.time_event,
+                    req.body.created_by
+                );
                 if (find_event) {
                     res.status(400).json({
-                        error: 'You have already created an event with the same host, activity, date and time',
+                        error: 'You have already created an event with the same host,activity, date and time',
                     });
                 } else {
                     const event_created = await Helpers.Events.create_event(
+                        req.body.name,
+                        req.body.picture,
                         req.body.host_id,
                         req.body.activity_id,
                         req.body.date_event,
@@ -63,6 +73,19 @@ router.get('/', async (req, res) => {
                 error: 'Could not process your request, please check your parameters',
             });
         } else {
+            if (typeof(all_events) != 'boolean') {
+                for (const i in all_events){
+                    if (typeof(all_events[i]) != 'boolean') {
+                        const host_event = await Helpers.Hosts.get_host_by_id(all_events[i].host_id);
+                        const output = {
+                            ...all_events[i],
+                            location: host_event.location,
+                        }
+                        all_events[i] = output;
+                    }
+                }
+            }
+            console.log(all_events)
             res.status(200).json(all_events);
         }
     } catch (e) {
@@ -83,6 +106,10 @@ router.get('/:event_id', async (req, res) => {
                 error: "Cannot found this event",
             });
         } else {
+            if (typeof(event_found) != 'boolean') {
+                const host_event = await Helpers.Hosts.get_host_by_id(event_found.host_id);
+                event_found.host = host_event;
+            }
             res.status(200).json(event_found);
         }
     } catch (e) {

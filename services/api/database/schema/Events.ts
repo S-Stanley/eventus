@@ -5,6 +5,14 @@ const EventSchema = mongoose.Schema({
         type: String,
         require: true,
     },
+    name: {
+        type: String,
+        require: true,
+    },
+    picture: {
+        type: String,
+        require: true,
+    },
     activity_id: {
         type: String,
         require: true,
