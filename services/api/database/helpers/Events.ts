@@ -26,6 +26,7 @@ const create_event = async(
     description: string,
     minimal_number_of_participants: string,
     maximal_number_of_participants: string,
+    price: string,
     created_by: string,
 ): Promise<EventInterface | boolean> => {
     if (!ObjectId.isValid(host_id) || !ObjectId.isValid(activity_id)) {
@@ -48,6 +49,10 @@ const create_event = async(
         console.error('Invalid format maximal_number_of_participants');
         return (false);
     }
+    if (parseInt(price, 10) < 0){
+        console.error('Invalid format price');
+        return (false);
+    }
     const event_created = await new Schema.Events({
         name: name,
         picture: picture,
@@ -58,6 +63,7 @@ const create_event = async(
         description: description,
         minimal_number_of_participants: minimal_number_of_participants,
         maximal_number_of_participants: maximal_number_of_participants,
+        price: price,
         created_by: created_by,
         created_at: new Date(),
     }).save();

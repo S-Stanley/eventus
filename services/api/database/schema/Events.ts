@@ -37,6 +37,10 @@ const EventSchema = mongoose.Schema({
         type: String,
         require: true,
     },
+    price: {
+        type: String,
+        require: true,
+    },
     created_by: {
         type: String,
         require: true,

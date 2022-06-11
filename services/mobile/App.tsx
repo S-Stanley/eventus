@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import {
-    SafeAreaView,
-    ScrollView,
     Text,
     View,
     StyleSheet,
@@ -16,9 +14,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { IOS_GOOGLE_CLIENT_ID } from 'react-native-dotenv';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 import Helpers from './Helpers/Helpers';
 import EventListPage from './pages/Events/List';
+import EventViewPage from './pages/Events/View';
 
 
 interface GoogleAuthResponseInterface {
@@ -48,6 +48,16 @@ function SettingsScreen(props) {
 }
 
 const Tab = createBottomTabNavigator();
+const HomeStack = createNativeStackNavigator();
+
+function HomeStackScreen() {
+    return (
+        <HomeStack.Navigator>
+            <HomeStack.Screen name="All events" component={EventListPage} />
+            <HomeStack.Screen name="Event details" component={EventViewPage} />
+        </HomeStack.Navigator>
+    );
+  }
 
 export default function App() {
 
@@ -96,8 +106,8 @@ export default function App() {
     return (
         <NavigationContainer>
             { logged ? (
-            <Tab.Navigator>
-                <Tab.Screen name="Home" component={EventListPage} />
+            <Tab.Navigator screenOptions={{ headerShown: false }}>
+                <Tab.Screen name="Home" component={HomeStackScreen} />
                 <Tab.Screen name="Settings" children={() => <SettingsScreen logout={() => setLogged(false)} />} />
             </Tab.Navigator>
             ) : (

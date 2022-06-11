@@ -4,15 +4,22 @@ import {
     Text,
     SafeAreaView,
     FlatList,
-    Image
+    Image,
+    Pressable
 } from 'react-native';
 import Helpers from '../../Helpers/Helpers';
 import Events from '../../interfaces/Events';
 
-const EventThumbdail = (props: { event: Events }) => {
+const EventThumbdail = (props: { event: Events, navigation: any }) => {
+
     return (
-        <View
+        <Pressable
             style={{ paddingBottom: 25, paddingTop: 25 }}
+            onPress={() => {
+                props.navigation.navigate('Event details', {
+                    event: props.event,
+                 })
+            }}
         >
             <View style={{ paddingBottom: 10 }}>
                 <Text
@@ -29,11 +36,11 @@ const EventThumbdail = (props: { event: Events }) => {
                 source={{ uri: props.event.picture }}
                 style={{ width: 400, height: 100 }}
             />
-        </View>
+        </Pressable>
     )
 }
 
-const EventListPage = () => {
+const EventListPage = ({ navigation }) => {
 
     const [events, setEvents] = useState<Events[]>([]);
 
@@ -43,7 +50,7 @@ const EventListPage = () => {
     }
 
     const renderItem = ({ item }) => (
-        <EventThumbdail event={item} />
+        <EventThumbdail event={item} navigation={navigation} />
     )
 
     React.useEffect(() => {

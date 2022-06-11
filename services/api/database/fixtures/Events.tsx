@@ -20,6 +20,7 @@ const insert_events = async(
     description: string,
     minimal_number_of_participants: string,
     maximal_number_of_participants: string,
+    price: string,
     created_by: string,
 ) => {
     await new Schema.Events({
@@ -32,6 +33,7 @@ const insert_events = async(
         description: description,
         minimal_number_of_participants: minimal_number_of_participants,
         maximal_number_of_participants: maximal_number_of_participants,
+        price: price,
         created_by: created_by,
         created_at: new Date(),
     }).save();
@@ -63,6 +65,7 @@ mongoose.connect(process.env.MONGO_URI ?? 'mongodb://127.0.0.1:27017/').then(asy
         'Description is cool',
         '2',
         '3',
+        '15',
         'created_by',
     );
     await insert_events(
@@ -75,6 +78,7 @@ mongoose.connect(process.env.MONGO_URI ?? 'mongodb://127.0.0.1:27017/').then(asy
         'description',
         '6',
         '22',
+        '30',
         'created_by',
     );
     mongoose.connection.close();
