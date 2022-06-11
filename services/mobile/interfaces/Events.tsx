@@ -1,5 +1,3 @@
-import Hosts from './Hosts';
-
 interface Events {
     _id: string,
     name: string,
@@ -14,8 +12,7 @@ interface Events {
     maximal_number_of_participants: string,
     created_by: string,
     created_at: string,
-
-    host: Hosts,
+    price: string,
 }
 
 export default Events;

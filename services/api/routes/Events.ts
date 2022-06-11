@@ -8,7 +8,7 @@ import Utils from '../utils/Utils';
 
 router.post('/', async (req, res) => {
     try {
-        if (!Utils.Requests.verifParams(req.body, ['name', 'picture', 'host_id', 'activity_id', 'date_event', 'time_event', 'description', 'minimal_number_of_participants', 'maximal_number_of_participantsid', 'created_by'])){
+        if (!Utils.Requests.verifParams(req.body, ['name', 'picture', 'host_id', 'activity_id', 'date_event', 'time_event', 'description', 'minimal_number_of_participants', 'maximal_number_of_participantsid', 'price', 'created_by'])){
             res.status(422).json({
                 error: 'Missing parameter',
             })
@@ -43,6 +43,7 @@ router.post('/', async (req, res) => {
                         req.body.description,
                         req.body.minimal_number_of_participants,
                         req.body.maximal_number_of_participants,
+                        req.body.price,
                         req.body.created_by,
                     );
                     if (!event_created) {

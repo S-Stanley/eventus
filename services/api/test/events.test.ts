@@ -23,6 +23,7 @@ describe('/events', () => {
                 description: 'really cool activity',
                 minimal_number_of_participants: '8',
                 maximal_number_of_participantsid: '25',
+                price: '8',
                 created_by: '',
             });
             expect(res.status).to.equal(422);
