@@ -17,6 +17,20 @@ const authentificate_users_with_gmail = async(email: string, firstname: string, 
     }
 }
 
+const add_player_id = async (email: string, player_id: string): Promise<boolean> => {
+    try {
+        await axios.post(`${Config.Api.url}/users/notifications/player_id`, {
+            email: email,
+            player_id: player_id,
+        });
+        return (true);
+    } catch (e) {
+        console.error(e);
+        return (false);
+    }
+}
+
 export default {
     authentificate_users_with_gmail,
+    add_player_id,
 }

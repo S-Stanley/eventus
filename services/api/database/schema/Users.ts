@@ -24,7 +24,11 @@ const UserSchema = mongoose.Schema({
     created_at: {
         type: Date,
         require: true,
-    }
+    },
+    player_id: {
+        type: String,
+        require: true,
+    },
 });
 
 export default mongoose.model('Users', UserSchema);

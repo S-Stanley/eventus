@@ -1,3 +1,13 @@
+apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
+buildscript {
+    repositories {
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath 'gradle.plugin.com.onesignal:onesignal-gradle-plugin:[0.12.10, 0.99.99]'
+    }
+}
+
 apply plugin: "com.android.application"
 
 import com.android.build.OutputFile
@@ -264,6 +274,7 @@ dependencies {
 
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0' // <-- add this; newer versions should work too
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 

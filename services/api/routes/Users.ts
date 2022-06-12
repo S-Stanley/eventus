@@ -60,7 +60,31 @@ router.post('/auth/gmail', async (req, res) => {
         console.log(e);
         res.status(400).json({
             error: e,
-        })
+        });
+    }
+});
+
+router.post('/notifications/player_id', async(req, res) => {
+    try {
+        if (!Utils.Requests.verifParams(req.body, ['email', 'player_id'])){
+            res.status(422).json({
+                error: 'Missing parameter',
+            })
+        } else {
+            const is_user_updated = await Helpers.Users.add_player_id(req.body.email, req.body.player_id);
+            if (!is_user_updated) {
+                res.status(400).json({
+                    error: 'Error while trying to update user to add player_id',
+                });
+            } else {
+                res.status(200).json();
+            }
+        }
+    } catch (e) {
+        console.error(e);
+        res.status(400).json({
+            error: e,
+        });
     }
 });
 
