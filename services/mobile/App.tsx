@@ -11,15 +11,35 @@ import {
     GoogleSigninButton
 } from '@react-native-google-signin/google-signin';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { IOS_GOOGLE_CLIENT_ID } from 'react-native-dotenv';
+import { IOS_GOOGLE_CLIENT_ID, ONE_SIGNAL_APP_ID } from 'react-native-dotenv';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import OneSignal from 'react-native-onesignal';
 
 import Helpers from './Helpers/Helpers';
 import EventListPage from './pages/Events/List';
 import EventViewPage from './pages/Events/View';
 
+OneSignal.setLogLevel(6, 0);
+OneSignal.setAppId(ONE_SIGNAL_APP_ID);
+
+OneSignal.promptForPushNotificationsWithUserResponse(response => {
+    console.log("Prompt response:", response);
+});
+
+OneSignal.setNotificationWillShowInForegroundHandler(notificationReceivedEvent => {
+    console.log("OneSignal: notification will show in foreground:", notificationReceivedEvent);
+    let notification = notificationReceivedEvent.getNotification();
+    console.log("notification: ", notification);
+    const data = notification.additionalData
+    console.log("additionalData: ", data);
+    notificationReceivedEvent.complete(notification);
+});
+
+OneSignal.setNotificationOpenedHandler(notification => {
+    console.log("OneSignal: notification opened:", notification);
+});
 
 interface GoogleAuthResponseInterface {
     idToken: string,
@@ -77,6 +97,11 @@ export default function App() {
         }
     });
 
+    async function get_player_id(){
+        const deviceState = await OneSignal.getDeviceState();
+        return (deviceState?.userId);
+    }
+
     const signIn = async () => {
         try {
             await GoogleSignin.hasPlayServices();
@@ -88,6 +113,7 @@ export default function App() {
             if (!login) {
                 throw new Error('Err login');
             }
+            await Helpers.Users.add_player_id(userInfo.user.email, await get_player_id() ?? '');
             setLogged(true);
         } catch (error) {
             alert('Error while trying to connect, please try again later');

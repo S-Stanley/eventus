@@ -25,14 +25,33 @@ const create_users = async(email: string, password: string, name: string, firstn
     }
 }
 
-const find_user_by_email = async(email: string) => {
+const find_user_by_email = async(email: string): Promise<InterfaceUsers> => {
     const user_to_find = await Schema.Users.findOne({
         email: email,
     });
     return (user_to_find);
 }
 
+const add_player_id = async(email: string, player_id: string): Promise<boolean> => {
+    const usr = await find_user_by_email(email);
+    if (!usr){
+        return (false);
+    }
+    const updated_user: InterfaceUsers = await Schema.Users.findOneAndUpdate({
+        email: email,
+    }, {
+        player_id: player_id
+    }, {
+        new: true,
+    });
+    if (updated_user.player_id != player_id){
+        return (false);
+    }
+    return (true);
+}
+
 export default {
     create_users,
     find_user_by_email,
+    add_player_id,
 }
