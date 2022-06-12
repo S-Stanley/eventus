@@ -3,6 +3,7 @@ import Activities from "./Activities";
 import Hosts from "./Hosts";
 import HostActivityRelation from "./HostActivityRelations";
 import Events from "./Events";
+import Invitations from "./Invitations";
 
 export default {
     Users,
@@ -10,4 +11,5 @@ export default {
     Hosts,
     HostActivityRelation,
     Events,
+    Invitations,
 }
