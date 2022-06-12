@@ -77,7 +77,7 @@ router.post('/notifications/player_id', async(req, res) => {
                     error: 'Error while trying to update user to add player_id',
                 });
             } else {
-                res.status(200).json();
+                res.status(200).json(true);
             }
         }
     } catch (e) {

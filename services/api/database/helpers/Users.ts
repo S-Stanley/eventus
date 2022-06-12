@@ -50,8 +50,16 @@ const add_player_id = async(email: string, player_id: string): Promise<boolean> 
     return (true);
 }
 
+const find_user_by_id = async(user_id: string) => {
+    const user_to_find = await Schema.Users.findOne({
+        user_id: user_id,
+    });
+    return (user_to_find);
+}
+
 export default {
     create_users,
     find_user_by_email,
     add_player_id,
+    find_user_by_id,
 }

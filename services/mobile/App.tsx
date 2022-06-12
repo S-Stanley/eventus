@@ -113,6 +113,9 @@ export default function App() {
             if (!login) {
                 throw new Error('Err login');
             }
+            if (typeof(login) !== 'boolean'){
+                await AsyncStorage.setItem('user_id', login._id);
+            }
             await Helpers.Users.add_player_id(userInfo.user.email, await get_player_id() ?? '');
             setLogged(true);
         } catch (error) {
