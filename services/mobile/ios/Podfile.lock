@@ -88,7 +88,6 @@ PODS:
     - GTMSessionFetcher/Core (~> 1.5)
   - GTMSessionFetcher/Core (1.7.2)
   - libevent (2.1.12)
-  - OneSignal (2.16.7)
   - OneSignalXCFramework (3.11.1):
     - OneSignalXCFramework/OneSignalCore (= 3.11.1)
     - OneSignalXCFramework/OneSignalExtension (= 3.11.1)
@@ -453,7 +452,6 @@ DEPENDENCIES:
   - FlipperKit/SKIOSNetworkPlugin (= 0.125.0)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - GoogleSignIn (~> 6.1.0)
-  - OneSignal (< 3.0, >= 2.5.2)
   - OneSignalXCFramework (< 4.0, >= 3.0)
   - OpenSSL-Universal (= 1.1.1100)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
@@ -511,7 +509,6 @@ SPEC REPOS:
     - GTMAppAuth
     - GTMSessionFetcher
     - libevent
-    - OneSignal
     - OneSignalXCFramework
     - OpenSSL-Universal
     - SocketRocket
@@ -619,7 +616,6 @@ SPEC CHECKSUMS:
   GTMAppAuth: 4d8f864896f3646f0c33baf38a28362f4c601e15
   GTMSessionFetcher: 5595ec75acf5be50814f81e9189490412bad82ba
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
-  OneSignal: 67a3cf1d1edf2a9c22ba846e8d2eee2bf8cdb525
   OneSignalXCFramework: 8bdcaa3b7f6082565bf29c5481435376a33e94f2
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   RCT-Folly: 4d8508a426467c48885f1151029bc15fa5d7b3b8
@@ -659,6 +655,6 @@ SPEC CHECKSUMS:
   Yoga: 99652481fcd320aefa4a7ef90095b95acd181952
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 9c6b4e77fec8808df74ff80f6d37cefea8d2b968
+PODFILE CHECKSUM: a6be6fd2b02535f5bf3dbbe634ed833313c49488
 
 COCOAPODS: 1.11.3

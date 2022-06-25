@@ -26,7 +26,6 @@ target 'mobile' do
 
   target 'OneSignalNotificationServiceExtension' do
     pod 'OneSignalXCFramework', '>= 3.0', '< 4.0'
-    pod 'OneSignal', '>= 2.5.2', '< 3.0'
   end
 
   pod 'GoogleSignIn', '~> 6.1.0'

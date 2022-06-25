@@ -9,23 +9,32 @@ import Utils from '../utils/Utils'
 
 router.post('/', async(req : { body: { email: string, password: string, name: string, firstname: string, location: string} }, res) => {
     try {
-        if (!Utils.Requests.verifParams(req.body, ['email', 'password', 'name', 'firstname', 'location'])){
+        if (!Utils.Requests.verifParams(req.body, ['email', 'password'])){
             res.status(422).json({
                 error: 'Missing parameter',
             })
         }
         else {
-            const create = await Helpers.Users.create_users(
-                req.body.email,
-                req.body.password,
-                req.body.name,
-                req.body.firstname,
-                req.body.location,
-            );
-            if (!create){
-                throw new Error("Cannot create user");
+            const usr = await Helpers.Users.find_user_by_email(req.body.email);
+            if (usr) {
+                if (await Helpers.Users.check_password(req.body.password, usr?.password)) {
+                    res.status(200).json(usr);
+                } else {
+                    res.status(401).json('Wrong password');
+                }
+            } else {
+                const create = await Helpers.Users.create_users(
+                    req.body.email,
+                    req.body.password,
+                    req.body.name,
+                    req.body.firstname,
+                    req.body.location,
+                );
+                if (!create){
+                    throw new Error("Cannot create user");
+                }
+                res.status(201).json(create);
             }
-            res.status(201).json(create);
         }
     } catch (e) {
         console.log(e);
