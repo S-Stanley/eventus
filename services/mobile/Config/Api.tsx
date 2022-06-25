@@ -1,3 +1,4 @@
 export default {
-    url: 'https://sakafet.fr',
+    url: 'https://api.sakafet.fr',
+    // url: 'http://localhost:3042',
 }

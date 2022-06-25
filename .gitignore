@@ -1,3 +1,5 @@
 node_modules/
 .env*
 build/
+google-services.json
+services/mobile/android/gradle.properties

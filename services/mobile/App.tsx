@@ -11,7 +11,7 @@ import {
     GoogleSigninButton
 } from '@react-native-google-signin/google-signin';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { IOS_GOOGLE_CLIENT_ID, ONE_SIGNAL_APP_ID } from 'react-native-dotenv';
+import { IOS_GOOGLE_CLIENT_ID, ONE_SIGNAL_APP_ID, WEB_CLIENT_ID } from 'react-native-dotenv';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
@@ -56,7 +56,8 @@ interface GoogleAuthResponseInterface {
 }
 
 GoogleSignin.configure({
-    iosClientId: IOS_GOOGLE_CLIENT_ID
+    iosClientId: IOS_GOOGLE_CLIENT_ID,
+    webClientId: WEB_CLIENT_ID,
 });
 
 function SettingsScreen(props) {
@@ -120,6 +121,7 @@ export default function App() {
             setLogged(true);
         } catch (error) {
             alert('Error while trying to connect, please try again later');
+            alert(JSON.stringify(error));
             if (error.code === statusCodes.SIGN_IN_CANCELLED) {
                 // user cancelled the login flow
             } else if (error.code === statusCodes.IN_PROGRESS) {
@@ -143,6 +145,7 @@ export default function App() {
             <View style={styles.page}>
                 <View style={styles.section}>
                     <Text style={styles.title}>Welcome to Eventus!</Text>
+                    <Text style={styles.title}>v1.1.4</Text>
                 </View>
                 <View style={styles.section}>
                     <GoogleSigninButton
