@@ -25,6 +25,10 @@ const create_users = async(email: string, password: string, name: string, firstn
     }
 }
 
+const check_password = async (password: string, real_password: string) => {
+    return (await bcrypt.compareSync(password, real_password));
+}
+
 const find_user_by_email = async(email: string): Promise<InterfaceUsers> => {
     const user_to_find = await Schema.Users.findOne({
         email: email,
@@ -62,4 +66,5 @@ export default {
     find_user_by_email,
     add_player_id,
     find_user_by_id,
+    check_password,
 }

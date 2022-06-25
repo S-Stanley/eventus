@@ -3,6 +3,7 @@ import {
     Text,
     View,
     StyleSheet,
+    TouchableHighlight,
 } from 'react-native';
 
 import {
@@ -20,6 +21,7 @@ import OneSignal from 'react-native-onesignal';
 import Helpers from './Helpers/Helpers';
 import EventListPage from './pages/Events/List';
 import EventViewPage from './pages/Events/View';
+import EmailAuthPage from './pages/Auth/EmailAuthPage';
 
 OneSignal.setLogLevel(6, 0);
 OneSignal.setAppId(ONE_SIGNAL_APP_ID);
@@ -68,22 +70,7 @@ function SettingsScreen(props) {
     );
 }
 
-const Tab = createBottomTabNavigator();
-const HomeStack = createNativeStackNavigator();
-
-function HomeStackScreen() {
-    return (
-        <HomeStack.Navigator>
-            <HomeStack.Screen name="All events" component={EventListPage} />
-            <HomeStack.Screen name="Event details" component={EventViewPage} />
-        </HomeStack.Navigator>
-    );
-  }
-
-export default function App() {
-
-    const [logged, setLogged] = useState<boolean>(false);
-
+function WelcomeScreen({ signIn, navigation }) {
     const styles = StyleSheet.create({
         title: {
             fontSize: 20,
@@ -98,9 +85,80 @@ export default function App() {
         }
     });
 
+    return (
+        <View style={styles.page}>
+            <View style={styles.section}>
+                <Text style={styles.title}>Welcome to Eventus!</Text>
+                <Text
+                    style={{
+                        textAlign: 'center'
+                    }}>
+                        v1.1.5
+                </Text>
+            </View>
+            <View style={styles.section}>
+                <GoogleSigninButton
+                    style={{ width: 192, height: 48 }}
+                    size={GoogleSigninButton.Size.Wide}
+                    color={GoogleSigninButton.Color.Dark}
+                    onPress={signIn}
+                />
+            </View>
+            <View style={styles.section}>
+                <TouchableHighlight
+                    style={{
+                        backgroundColor: '#808080',
+                        width: 180,
+                        paddingTop: 10,
+                        paddingBottom: 10,
+                    }}
+                    onPress={() => navigation.navigate('Email Signup')}
+                >
+                    <Text
+                        style={{
+                            color: 'white',
+                            textAlign: 'center'
+                        }}
+                    >Sign in with email</Text>
+                </TouchableHighlight>
+            </View>
+        </View>
+    );
+}
+
+const Tab = createBottomTabNavigator();
+const HomeStack = createNativeStackNavigator();
+
+function HomeStackScreen() {
+    return (
+        <HomeStack.Navigator>
+            <HomeStack.Screen name="All events" component={EventListPage} />
+            <HomeStack.Screen name="Event details" component={EventViewPage} />
+        </HomeStack.Navigator>
+    );
+}
+
+function UnloggedScreen({ signIn, connected_successfully }) {
+    return (
+        <HomeStack.Navigator>
+            <HomeStack.Screen options={{headerShown: false}} name="Welcome" children={(navigation) => <WelcomeScreen signIn={signIn} navigation={navigation.navigation} />} />
+            <HomeStack.Screen name="Email Signup" children={(navigation) => <EmailAuthPage navigation={navigation} connected_successfully={connected_successfully} />} />
+        </HomeStack.Navigator>
+    );
+}
+
+export default function App() {
+
+    const [logged, setLogged] = useState<boolean>(false);
+
     async function get_player_id(){
         const deviceState = await OneSignal.getDeviceState();
         return (deviceState?.userId);
+    }
+
+    const connected_successfully = async(email: string) => {
+        await Helpers.Users.add_player_id(email, await get_player_id() ?? '');
+        setLogged(true);
     }
 
     const signIn = async () => {
@@ -117,8 +175,7 @@ export default function App() {
             if (typeof(login) !== 'boolean'){
                 await AsyncStorage.setItem('user_id', login._id);
             }
-            await Helpers.Users.add_player_id(userInfo.user.email, await get_player_id() ?? '');
-            setLogged(true);
+            connected_successfully(userInfo.user.email);
         } catch (error) {
             alert('Error while trying to connect, please try again later');
             alert(JSON.stringify(error));
@@ -142,20 +199,9 @@ export default function App() {
                 <Tab.Screen name="Settings" children={() => <SettingsScreen logout={() => setLogged(false)} />} />
             </Tab.Navigator>
             ) : (
-            <View style={styles.page}>
-                <View style={styles.section}>
-                    <Text style={styles.title}>Welcome to Eventus!</Text>
-                    <Text style={styles.title}>v1.1.4</Text>
-                </View>
-                <View style={styles.section}>
-                    <GoogleSigninButton
-                        style={{ width: 192, height: 48 }}
-                        size={GoogleSigninButton.Size.Wide}
-                        color={GoogleSigninButton.Color.Dark}
-                        onPress={signIn}
-                    />
-                </View>
-            </View>
+            <Tab.Navigator screenOptions={{ headerShown: false }}>
+                <Tab.Screen name="Home" children={() => <UnloggedScreen signIn={signIn} connected_successfully={connected_successfully} />} />
+            </Tab.Navigator>
             )}
         </NavigationContainer>
     );
