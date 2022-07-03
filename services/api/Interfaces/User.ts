@@ -4,6 +4,7 @@ interface InterfaceUsers {
     location: string,
     email: string,
     player_id: string,
+    password?: string,
 }
 
 export default InterfaceUsers;

@@ -15,10 +15,8 @@ class NotificationService: UNNotificationServiceExtension {
         
         if let bestAttemptContent = bestAttemptContent {
             //If your SDK version is < 3.5.0 uncomment and use this code:
-            /*
             OneSignal.didReceiveNotificationExtensionRequest(self.receivedRequest, with: self.bestAttemptContent)
             contentHandler(bestAttemptContent)
-            */
             
             /* DEBUGGING: Uncomment the 2 lines below to check this extension is excuting
                           Note, this extension only runs when mutable-content is set
@@ -26,7 +24,7 @@ class NotificationService: UNNotificationServiceExtension {
             //OneSignal.setLogLevel(.LL_VERBOSE, visualLevel: .LL_NONE)
             //bestAttemptContent.body = "[Modified] " + bestAttemptContent.body
             
-            OneSignal.didReceiveNotificationExtensionRequest(self.receivedRequest, with: bestAttemptContent, withContentHandler: self.contentHandler)
+            OneSignal.didReceiveNotificationExtensionRequest(self.receivedRequest, with: bestAttemptContent)
         }
     }
     
