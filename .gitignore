@@ -3,3 +3,4 @@ node_modules/
 build/
 google-services.json
 services/mobile/android/gradle.properties
+.DS_Store
