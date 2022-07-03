@@ -3,7 +3,8 @@ import {
     View,
     Text,
     Image,
-    Button
+    Button,
+    ScrollView
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -48,7 +49,7 @@ const EventViewPage = (props) => {
     }, [false]);
 
     return (
-        <View>
+        <ScrollView>
             <View
                 style={{
                     paddingBottom: 20,
@@ -149,7 +150,7 @@ const EventViewPage = (props) => {
                 </View>
             </View>
         }
-        </View>
+        </ScrollView>
     )
 }
 
