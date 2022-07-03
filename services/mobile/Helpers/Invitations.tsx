@@ -8,7 +8,8 @@ const find_invitation_by_event_id_and_user_id = async(event_id: string, user_id:
         return (req.data);
     } catch (e){
         console.error(JSON.stringify(e));
-        alert('There was an error from our side, please try again later');
+        // alert(JSON.stringify(e.response.data));
+        // alert('There was an error from our side, please try again later');
         return (false);
     }
 }
@@ -23,6 +24,7 @@ const update_invitations = async(event_id: string, user_id: string, state: strin
         return (req.data);
     } catch (e){
         console.error(JSON.stringify(e));
+        alert(JSON.stringify(e.response.data));
         alert('There was an error from our side, please try again later');
         return (false);
     }

@@ -8,6 +8,7 @@ const get_host_by_id = async(host_id: string): Promise<Hosts | boolean> => {
         return (req.data);
     } catch (e) {
         console.error(JSON.stringify(e));
+        alert(JSON.stringify(e.response.data))
         alert('There was an error from our side, please try again later');
         return (false);
     }

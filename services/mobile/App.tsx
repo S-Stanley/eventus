@@ -93,7 +93,7 @@ function WelcomeScreen({ signIn, navigation }) {
                     style={{
                         textAlign: 'center'
                     }}>
-                        v1.1.5
+                        v1.6.2 (beta)
                 </Text>
             </View>
             <View style={styles.section}>
