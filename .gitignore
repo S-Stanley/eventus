@@ -4,3 +4,4 @@ build/
 google-services.json
 services/mobile/android/gradle.properties
 .DS_Store
+services/mobile/android/app/src/main/assets/index.android.bundle
