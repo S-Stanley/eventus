@@ -1,3 +1,12 @@
+---
+name: Suggestion
+about: Suggestion you may have
+title: ''
+labels: ''
+assignees: ''
+
+---
+
 ### Problem/Contexte
 
 ### Solution proposed
