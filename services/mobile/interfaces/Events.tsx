@@ -13,6 +13,7 @@ interface Events {
     created_by: string,
     created_at: string,
     price: string,
+    reservation_link: string,
 }
 
 export default Events;

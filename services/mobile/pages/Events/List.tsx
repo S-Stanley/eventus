@@ -5,7 +5,8 @@ import {
     SafeAreaView,
     FlatList,
     Image,
-    Pressable
+    Pressable,
+    Linking
 } from 'react-native';
 import Helpers from '../../Helpers/Helpers';
 import Events from '../../interfaces/Events';
@@ -15,10 +16,14 @@ const EventThumbdail = (props: { event: Events, navigation: any }) => {
     return (
         <Pressable
             style={{ paddingBottom: 25, paddingTop: 25 }}
-            onPress={() => {
-                props.navigation.navigate('Event details', {
-                    event: props.event,
-                 })
+            onPress={async() => {
+                if (props.event.reservation_link) {
+                    await Linking.openURL(props.event.reservation_link)
+                } else {
+                    props.navigation.navigate('Event details', {
+                        event: props.event,
+                    });
+                }
             }}
         >
             <View style={{ paddingBottom: 10 }}>
