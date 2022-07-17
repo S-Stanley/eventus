@@ -28,6 +28,7 @@ const create_event = async(
     maximal_number_of_participants: string,
     price: string,
     created_by: string,
+    reservation_link: string = '',
 ): Promise<EventInterface | boolean> => {
     if (!ObjectId.isValid(host_id) || !ObjectId.isValid(activity_id)) {
         console.error('Invalid format id');
@@ -66,6 +67,7 @@ const create_event = async(
         price: price,
         created_by: created_by,
         created_at: new Date(),
+        reservation_link: reservation_link,
     }).save();
     return (event_created);
 }
