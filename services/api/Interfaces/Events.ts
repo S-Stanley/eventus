@@ -13,6 +13,7 @@ interface EventInterface {
     maximal_number_of_participants: string,
     created_by: string,
     created_at: string,
+    reservation_link: string,
     host?: HostInterface,
 }
 
