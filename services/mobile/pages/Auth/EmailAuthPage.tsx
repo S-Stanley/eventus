@@ -4,9 +4,13 @@ import {
     Text,
     TextInput,
     StyleSheet,
-    TouchableHighlight
+    TouchableHighlight,
+    Appearance,
+    Platform
 } from 'react-native';
 import Helpers from '../../Helpers/Helpers';
+
+const scheme = Appearance.getColorScheme();
 
 const styles = StyleSheet.create({
     input: {
@@ -14,6 +18,7 @@ const styles = StyleSheet.create({
       margin: 12,
       borderWidth: 1,
       padding: 10,
+      borderColor: scheme === 'dark' && Platform.OS === 'android' ? 'white' : 'lightgrey'
     },
 });
 
