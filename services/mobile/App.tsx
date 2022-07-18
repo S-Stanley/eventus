@@ -4,6 +4,8 @@ import {
     View,
     StyleSheet,
     TouchableHighlight,
+    Appearance,
+    Platform,
 } from 'react-native';
 
 import {
@@ -17,6 +19,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import OneSignal from 'react-native-onesignal';
+import { DefaultTheme, DarkTheme } from '@react-navigation/native';
 
 import Helpers from './Helpers/Helpers';
 import EventListPage from './pages/Events/List';
@@ -191,8 +194,10 @@ export default function App() {
         }
     };
 
+    const scheme = Appearance.getColorScheme();
+
     return (
-        <NavigationContainer>
+        <NavigationContainer theme={scheme === 'dark' && Platform.OS === 'android' ? DarkTheme : DefaultTheme}>
             { logged ? (
             <Tab.Navigator screenOptions={{ headerShown: false }}>
                 <Tab.Screen name="Home" component={HomeStackScreen} />
