@@ -52,6 +52,7 @@ router.post('/', async (req, res) => {
                             error: 'Error in your request',
                         });
                     } else {
+                        await Utils.Notifications.send_notification_to_all_users();
                         res.status(201).json(event_created);
                     }
                 }
