@@ -49,6 +49,10 @@ const EventSchema = mongoose.Schema({
         type: String,
         require: true,
     },
+    reservation_link: {
+        type: String,
+        require: true
+    },
 });
 
 export default mongoose.model('Events', EventSchema);

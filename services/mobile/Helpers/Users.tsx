@@ -50,7 +50,7 @@ const login_or_signup_user = async (email: string, password:string): Promise<Use
         return (req.data);
     } catch (e) {
         console.error(e);
-        alert(e?.response?.data ?? 'There was an error from our side, please try again later');
+        alert(JSON.stringify(e?.response?.data));
         return (null);
     }
 }

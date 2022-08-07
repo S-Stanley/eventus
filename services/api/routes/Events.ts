@@ -45,12 +45,14 @@ router.post('/', async (req, res) => {
                         req.body.maximal_number_of_participants,
                         req.body.price,
                         req.body.created_by,
+                        req.body.reservation_link ?? '',
                     );
                     if (!event_created) {
                         res.status(400).json({
                             error: 'Error in your request',
                         });
                     } else {
+                        await Utils.Notifications.send_notification_to_all_users();
                         res.status(201).json(event_created);
                     }
                 }

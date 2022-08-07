@@ -54,11 +54,16 @@ const add_player_id = async(email: string, player_id: string): Promise<boolean> 
     return (true);
 }
 
-const find_user_by_id = async(user_id: string) => {
+const find_user_by_id = async(user_id: string): Promise<InterfaceUsers> => {
     const user_to_find = await Schema.Users.findOne({
         user_id: user_id,
     });
     return (user_to_find);
+}
+
+const get_all_users = async(page: number = 0, limit: number = 5): Promise<InterfaceUsers[]> => {
+    const all_users = Schema.Users.find().skip(page * limit).limit(limit);
+    return (all_users);
 }
 
 export default {
@@ -67,4 +72,5 @@ export default {
     add_player_id,
     find_user_by_id,
     check_password,
+    get_all_users,
 }
