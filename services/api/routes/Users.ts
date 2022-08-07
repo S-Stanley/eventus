@@ -45,6 +45,7 @@ router.post('/', async(req : { body: { email: string, password: string, name: st
 });
 
 router.post('/auth/gmail', async (req, res) => {
+    console.log('ROUTER CONNECTION CALLED');
     try {
         if (!Utils.Requests.verifParams(req.body, ['email', 'name', 'firstname'])){
             res.status(422).json({

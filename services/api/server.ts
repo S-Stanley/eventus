@@ -25,7 +25,7 @@ app.get('/ping', (req, res) => {
     res.status(200).json('Api is running');
 })
 
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
     console.log('Running on', port);
 });
 
