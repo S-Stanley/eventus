@@ -20,6 +20,7 @@ app.use('/activities', require('./routes/Activities'));
 app.use('/hosts', require('./routes/Hosts'));
 app.use('/events', require('./routes/Events'));
 app.use('/invitations', require('./routes/Invitations'));
+app.use('/adm', require('./routes/Admin'));
 
 app.get('/ping', (req, res) => {
     res.status(200).json('Api is running');

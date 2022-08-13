@@ -4,9 +4,11 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 import App from './pages/home/HomePage';
 import PrivacyPage from './pages/documents/privacy';
-import ContactPage from './pages/documents/contact';
+import ContactPage from './pages/contact/contact';
 import CopyrightPage from './pages/documents/copyright';
 
 const root = ReactDOM.createRoot(
