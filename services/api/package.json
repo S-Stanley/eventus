@@ -25,6 +25,7 @@
     "express": "^4.17.3",
     "mocha": "^10.0.0",
     "mongoose": "^6.3.3",
+    "nodemailer": "^6.7.8",
     "nodemon": "^2.0.15",
     "swagger-autogen": "^2.21.1",
     "swagger-ui-express": "^4.4.0",
