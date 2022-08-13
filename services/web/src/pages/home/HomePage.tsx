@@ -1,9 +1,6 @@
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 function App() {
-
-	const navigate = useNavigate();
-
 	return (
 		<div style={{
 			paddingLeft: 10,
