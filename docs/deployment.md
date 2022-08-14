@@ -5,6 +5,7 @@ React native documentation for [ios deployment](https://reactnative.dev/docs/pub
 ### Prepare the deployment
 
 1. Open a issue about deployment
+1. Update the build version on `~/eventus/services/mobile/App.tsx`
 1. Create a branch and a PR to merge master into main.
 
 ## iOS
