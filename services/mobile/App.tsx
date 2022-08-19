@@ -100,12 +100,14 @@ function WelcomeScreen({ signIn, navigation }) {
                 </Text>
             </View>
             <View style={styles.section}>
-                <GoogleSigninButton
-                    style={{ width: 192, height: 48 }}
-                    size={GoogleSigninButton.Size.Wide}
-                    color={GoogleSigninButton.Color.Dark}
-                    onPress={signIn}
-                />
+                { Platform.OS !== 'android' &&
+                    <GoogleSigninButton
+                        style={{ width: 192, height: 48 }}
+                        size={GoogleSigninButton.Size.Wide}
+                        color={GoogleSigninButton.Color.Dark}
+                        onPress={signIn}
+                    />
+                }
             </View>
             <View style={styles.section}>
                 <TouchableHighlight
