@@ -60,6 +60,15 @@ const EmailAuthPage = ({ navigation, connected_successfully }) => {
                     alignItems: 'center'
                 }}
             >
+                <Text
+                    style={{
+                        textDecorationLine: 'underline',
+                        paddingBottom: 15
+                    }}
+                    onPress={() => navigation.navigate('New password request')}
+                >
+                Forget password ?
+                </Text>
                 <TouchableHighlight
                     onPress={login_or_signup}
                 >

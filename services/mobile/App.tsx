@@ -25,6 +25,7 @@ import Helpers from './Helpers/Helpers';
 import EventListPage from './pages/Events/List';
 import EventViewPage from './pages/Events/View';
 import EmailAuthPage from './pages/Auth/EmailAuthPage';
+import ForgetPasswordPage from './pages/Auth/ForgetPasswordPage';
 
 OneSignal.setLogLevel(6, 0);
 OneSignal.setAppId(ONE_SIGNAL_APP_ID);
@@ -147,7 +148,8 @@ function UnloggedScreen({ signIn, connected_successfully }) {
     return (
         <HomeStack.Navigator>
             <HomeStack.Screen options={{headerShown: false}} name="Welcome" children={(navigation) => <WelcomeScreen signIn={signIn} navigation={navigation.navigation} />} />
-            <HomeStack.Screen name="Email Signup" children={(navigation) => <EmailAuthPage navigation={navigation} connected_successfully={connected_successfully} />} />
+            <HomeStack.Screen name="Email Signup" children={(navigation) => <EmailAuthPage navigation={navigation.navigation} connected_successfully={connected_successfully} />} />
+            <HomeStack.Screen name="New password request" children={(navigation) => <ForgetPasswordPage navigation={navigation.navigation} />} />
         </HomeStack.Navigator>
     );
 }

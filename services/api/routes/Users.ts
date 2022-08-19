@@ -37,7 +37,7 @@ router.post('/', async(req : { body: { email: string, password: string, name: st
             }
         }
     } catch (e) {
-        console.log(e);
+        console.error(e);
         res.status(400).json({
             error: e,
         })
@@ -45,7 +45,6 @@ router.post('/', async(req : { body: { email: string, password: string, name: st
 });
 
 router.post('/auth/gmail', async (req, res) => {
-    console.log('ROUTER CONNECTION CALLED');
     try {
         if (!Utils.Requests.verifParams(req.body, ['email', 'name', 'firstname'])){
             res.status(422).json({
@@ -67,7 +66,7 @@ router.post('/auth/gmail', async (req, res) => {
             }
         }
     } catch (e) {
-        console.log(e);
+        console.error(e);
         res.status(400).json({
             error: e,
         });
@@ -89,6 +88,65 @@ router.post('/notifications/player_id', async(req, res) => {
             } else {
                 res.status(200).json(true);
             }
+        }
+    } catch (e) {
+        console.error(e);
+        res.status(400).json({
+            error: e,
+        });
+    }
+});
+
+router.post('/password/new/generate', async (req, res) => {
+    try {
+        if (!Utils.Requests.verifParams(req.body, ['password', 'email'])){
+            res.status(422).json({
+                error: 'Missing parameter',
+            });
+        } else {
+            const usr = await Helpers.Users.find_user_by_email(req.body.email);
+            if (!usr) {
+                throw new Error('User does not exist');
+            }
+            const generate_password_request = await Helpers.PasswordRequests.create_password_request(
+                req.body.password,
+                usr._id
+            );
+            if (!generate_password_request){
+                res.status(500).json('Error while trying to generate password request');
+            } else {
+                const send_email = await Utils.Email.send_email(
+                    'You have requested a password change on eventus',
+                    usr.email.toLocaleLowerCase(),
+                    `Your verification code for your password request change is ${generate_password_request.code}`
+                );
+                if (!send_email) {
+                    res.status(500).json('Error while trying to send email, please try again later');
+                } else {
+                    res.status(200).json(generate_password_request);
+                }
+            }
+        }
+    } catch (e) {
+        console.error(e);
+        res.status(400).json({
+            error: e,
+        });
+    }
+});
+
+router.post('/password/new/validate', async (req, res) => {
+    try {
+        if (!Utils.Requests.verifParams(req.body, ['code', 'request_id'])){
+            res.status(422).json({
+                error: 'Missing parameter',
+            })
+        } else {
+            await Helpers.PasswordRequests.set_password_request_as_validated(
+                req.body.request_id,
+                req.body.code,
+            );
+            res.status(200).json(true);
         }
     } catch (e) {
         console.error(e);

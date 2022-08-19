@@ -19,6 +19,7 @@ const send_email = async(subject: string, to: string, message: string): Promise<
             text: message,
             html: message,
         });
+        console.log(info);
         console.log("Message sent: %s", info.messageId);
         return (true);
     } catch(e) {
