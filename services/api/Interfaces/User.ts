@@ -1,4 +1,5 @@
 interface InterfaceUsers {
+    _id: string,
     name: string,
     firstname: string,
     location: string,

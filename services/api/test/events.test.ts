@@ -3,8 +3,6 @@ const { expect } = require('chai');
 const server = require('../server');
 require('mocha');
 const { agent } = require('supertest');
-const chance = require('chance');
-const random = new chance();
 
 describe('/events', () => {
     describe('POST /events', () => {
