@@ -6,6 +6,7 @@ interface InterfaceUsers {
     email: string,
     player_id: string,
     password?: string,
+    apple_user_id?: string,
 }
 
 export default InterfaceUsers;

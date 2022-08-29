@@ -3,7 +3,7 @@ import InterfaceUsers from "../../Interfaces/User";
 const bcrypt = require('bcryptjs');
 const saltRounds = 10;
 
-const create_users = async(email: string, password: string, name: string, firstname: string, location: string): Promise<InterfaceUsers | boolean> => {
+const create_users = async(email: string, password: string, name: string, firstname: string, location: string, apple_user_id: string = ''): Promise<InterfaceUsers | boolean> => {
     try {
         const hash = await bcrypt.hashSync(password, saltRounds);
         const create = await new Schema.Users({
@@ -12,6 +12,7 @@ const create_users = async(email: string, password: string, name: string, firstn
             name: name,
             firstname: firstname,
             location: location,
+            apple_user_id: apple_user_id,
             created_at: Date.now(),
         }).save();
         if (!create) {
@@ -54,6 +55,24 @@ const add_player_id = async(email: string, player_id: string): Promise<boolean> 
     return (true);
 }
 
+const add_player_id_with_apple = async(apple_user_id: string, player_id: string): Promise<boolean> => {
+    const usr = await find_user_by_apple_user_id(apple_user_id);
+    if (!usr){
+        return (false);
+    }
+    const updated_user: InterfaceUsers = await Schema.Users.findOneAndUpdate({
+        apple_user_id: apple_user_id,
+    }, {
+        player_id: player_id
+    }, {
+        new: true,
+    });
+    if (updated_user.player_id != player_id){
+        return (false);
+    }
+    return (true);
+}
+
 const find_user_by_id = async(user_id: string): Promise<InterfaceUsers> => {
     const user_to_find = await Schema.Users.findOne({
         user_id: user_id,
@@ -66,6 +85,13 @@ const get_all_users = async(page: number = 0, limit: number = 5): Promise<Interf
     return (all_users);
 }
 
+const find_user_by_apple_user_id = async(apple_user_id: string): Promise<InterfaceUsers> => {
+    const user_to_find = await Schema.Users.findOne({
+        apple_user_id: apple_user_id,
+    });
+    return (user_to_find);
+}
+
 export default {
     create_users,
     find_user_by_email,
@@ -73,4 +99,6 @@ export default {
     find_user_by_id,
     check_password,
     get_all_users,
+    find_user_by_apple_user_id,
+    add_player_id_with_apple,
 }

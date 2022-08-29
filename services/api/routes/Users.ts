@@ -73,6 +73,36 @@ router.post('/auth/gmail', async (req, res) => {
     }
 });
 
+router.post('/auth/apple', async (req, res) => {
+    try {
+        if (!Utils.Requests.verifParams(req.body, ['email', 'apple_user_id'])){
+            res.status(422).json({
+                error: 'Missing parameter',
+            });
+        } else {
+            const user_to_find = await Helpers.Users.find_user_by_apple_user_id(req.body.apple_user_id);
+            if (user_to_find) {
+                res.status(200).json(user_to_find);
+            } else {
+                const user_created = await Helpers.Users.create_users(
+                    req.body.email,
+                    '',
+                    '',
+                    '',
+                    '',
+                    req.body.apple_user_id,
+                );
+                res.status(200).json(user_created);
+            }
+        }
+    } catch (e) {
+        console.error(e);
+        res.status(400).json({
+            error: e,
+        });
+    }
+})
+
 router.post('/notifications/player_id', async(req, res) => {
     try {
         if (!Utils.Requests.verifParams(req.body, ['email', 'player_id'])){
@@ -81,6 +111,30 @@ router.post('/notifications/player_id', async(req, res) => {
             })
         } else {
             const is_user_updated = await Helpers.Users.add_player_id(req.body.email, req.body.player_id);
+            if (!is_user_updated) {
+                res.status(400).json({
+                    error: 'Error while trying to update user to add player_id',
+                });
+            } else {
+                res.status(200).json(true);
+            }
+        }
+    } catch (e) {
+        console.error(e);
+        res.status(400).json({
+            error: e,
+        });
+    }
+});
+
+router.post('/notifications/player_id/apple', async(req, res) => {
+    try {
+        if (!Utils.Requests.verifParams(req.body, ['apple_user_id', 'player_id'])){
+            res.status(422).json({
+                error: 'Missing parameter',
+            })
+        } else {
+            const is_user_updated = await Helpers.Users.add_player_id_with_apple(req.body.apple_user_id, req.body.player_id);
             if (!is_user_updated) {
                 res.status(400).json({
                     error: 'Error while trying to update user to add player_id',
