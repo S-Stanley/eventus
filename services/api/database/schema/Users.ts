@@ -29,6 +29,12 @@ const UserSchema = mongoose.Schema({
         type: String,
         require: true,
     },
+    apple_user_id: {
+        type: String,
+        require: false,
+        default: '',
+        unique: true,
+    },
 });
 
 export default mongoose.model('Users', UserSchema);

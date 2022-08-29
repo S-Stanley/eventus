@@ -20,6 +20,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import OneSignal from 'react-native-onesignal';
 import { DefaultTheme, DarkTheme } from '@react-navigation/native';
+import { AppleButton, appleAuth } from '@invertase/react-native-apple-authentication';
 
 import Helpers from './Helpers/Helpers';
 import EventListPage from './pages/Events/List';
@@ -74,7 +75,7 @@ function SettingsScreen(props) {
     );
 }
 
-function WelcomeScreen({ signIn, navigation }) {
+function WelcomeScreen({ signInWithGoogle, navigation, signInWithApple }) {
     const styles = StyleSheet.create({
         title: {
             fontSize: 20,
@@ -88,6 +89,21 @@ function WelcomeScreen({ signIn, navigation }) {
             margin: 20,
         }
     });
+
+    const onAppleButtonPress = async(): Promise<void> => {
+        const appleAuthRequestResponse = await appleAuth.performRequest({
+            requestedOperation: appleAuth.Operation.LOGIN,
+            requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+        });
+
+        const credentialState = await appleAuth.getCredentialStateForUser(appleAuthRequestResponse.user);
+
+        if (credentialState === appleAuth.State.AUTHORIZED) {
+            signInWithApple(appleAuthRequestResponse);
+        } else {
+            alert('Error while tyring to login with Apple')
+        }
+    }
 
     return (
         <View style={styles.page}>
@@ -106,7 +122,20 @@ function WelcomeScreen({ signIn, navigation }) {
                         style={{ width: 192, height: 48 }}
                         size={GoogleSigninButton.Size.Wide}
                         color={GoogleSigninButton.Color.Dark}
-                        onPress={signIn}
+                        onPress={signInWithGoogle}
+                    />
+                }
+            </View>
+            <View>
+                { Platform.OS !== 'android' &&
+                    <AppleButton
+                        buttonStyle={AppleButton.Style.WHITE_OUTLINE}
+                        buttonType={AppleButton.Type.SIGN_IN}
+                        style={{
+                            width: 186,
+                            height: 45,
+                        }}
+                        onPress={() => onAppleButtonPress()}
                     />
                 }
             </View>
@@ -144,10 +173,10 @@ function HomeStackScreen() {
     );
 }
 
-function UnloggedScreen({ signIn, connected_successfully }) {
+function UnloggedScreen({ signInWithGoogle, connected_successfully, signInWithApple }) {
     return (
         <HomeStack.Navigator>
-            <HomeStack.Screen options={{headerShown: false}} name="Welcome" children={(navigation) => <WelcomeScreen signIn={signIn} navigation={navigation.navigation} />} />
+            <HomeStack.Screen options={{headerShown: false}} name="Welcome" children={(navigation) => <WelcomeScreen signInWithGoogle={signInWithGoogle} navigation={navigation.navigation} signInWithApple={signInWithApple} />} />
             <HomeStack.Screen name="Email Signup" children={(navigation) => <EmailAuthPage navigation={navigation.navigation} connected_successfully={connected_successfully} />} />
             <HomeStack.Screen name="New password request" children={(navigation) => <ForgetPasswordPage navigation={navigation.navigation} />} />
         </HomeStack.Navigator>
@@ -168,7 +197,12 @@ export default function App() {
         setLogged(true);
     }
 
-    const signIn = async () => {
+    const connected_successfull_with_apple = async(apple_user_id: string) => {
+        await Helpers.Users.add_player_id_with_apple(apple_user_id, await get_player_id() ?? '');
+        setLogged(true);
+    }
+
+    const signInWithGoogle = async () => {
         try {
             await GoogleSignin.hasPlayServices();
             const userInfo: GoogleAuthResponseInterface = await GoogleSignin.signIn();
@@ -198,6 +232,23 @@ export default function App() {
         }
     };
 
+    const signInWithApple = async (appleCredentials: { user: string, email: string }): Promise<void> => {
+        try {
+            const login = await Helpers.Users.authentificate_users_with_apple(appleCredentials.user, appleCredentials.email ?? '');
+            await AsyncStorage.setItem('email', appleCredentials.email ?? '');
+            if (!login) {
+                throw new Error('Err login');
+            }
+            if (typeof(login) !== 'boolean'){
+                await AsyncStorage.setItem('user_id', login._id);
+            }
+            connected_successfull_with_apple(appleCredentials.user);
+        } catch (error) {
+            alert('Error while trying to connect, please try again later');
+            alert(JSON.stringify(error));
+        }
+    };
+
     const scheme = Appearance.getColorScheme();
 
     return (
@@ -209,7 +260,11 @@ export default function App() {
             </Tab.Navigator>
             ) : (
             <Tab.Navigator screenOptions={{ headerShown: false }}>
-                <Tab.Screen name="Home" children={() => <UnloggedScreen signIn={signIn} connected_successfully={connected_successfully} />} />
+                <Tab.Screen name="Home" children={() => <UnloggedScreen
+                    signInWithGoogle={signInWithGoogle}
+                    connected_successfully={connected_successfully}
+                    signInWithApple={signInWithApple}
+                />} />
             </Tab.Navigator>
             )}
         </NavigationContainer>
