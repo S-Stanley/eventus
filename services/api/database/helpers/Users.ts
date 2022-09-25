@@ -14,6 +14,7 @@ const create_users = async(email: string, password: string, name: string, firstn
             location: location,
             apple_user_id: apple_user_id,
             created_at: Date.now(),
+            role: 'user',
         }).save();
         if (!create) {
             throw new Error('Cannot create users');
@@ -92,6 +93,17 @@ const find_user_by_apple_user_id = async(apple_user_id: string): Promise<Interfa
     return (user_to_find);
 }
 
+const update_role_user = async(user_id: string, role: string): Promise<InterfaceUsers> => {
+    const user_to_update = await Schema.Users.findOneAndUpdate({
+        _id: user_id,
+    }, {
+        role: role,
+    }, {
+        new: true,
+    });
+    return (user_to_update);
+}
+
 export default {
     create_users,
     find_user_by_email,
@@ -101,4 +113,5 @@ export default {
     get_all_users,
     find_user_by_apple_user_id,
     add_player_id_with_apple,
+    update_role_user,
 }

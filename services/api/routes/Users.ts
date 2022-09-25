@@ -5,7 +5,7 @@ const swaggerAutogen = require('swagger-autogen')();
 const router = express.Router();
 
 import Helpers from "../database/helpers/Helpers";
-import Utils from '../utils/Utils'
+import Utils from '../utils/Utils';
 
 router.post('/', async(req : { body: { email: string, password: string, name: string, firstname: string, location: string} }, res) => {
     try {
@@ -207,6 +207,24 @@ router.post('/password/new/validate', async (req, res) => {
         res.status(400).json({
             error: e,
         });
+    }
+});
+
+router.patch('/:user_id/role', async (req, res) => {
+    try {
+        if (!Utils.Requests.verifParams(req.body, ['role'])){
+            res.status(422).json({
+                error: 'Missing parameter',
+            });
+        } else {
+            const update = await Helpers.Users.update_role_user(req.params.user_id, req.body.role);
+            res.status(200).json(update);
+        }
+    } catch(e) {
+        console.error(e);
+        res.status(400).json({
+            error: e,
+        })
     }
 });
 
