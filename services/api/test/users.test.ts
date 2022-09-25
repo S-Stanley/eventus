@@ -52,17 +52,40 @@ describe("/users", () => {
             expect(data['_id']).to.equal(1);
             expect(data['role']).to.equal('ADMIN');
         });
-        it('test that user role can be updated', async() => {
+        it('test that user role cannot be updated', async() => {
             const req = await agent(server)
                 .patch(`/users/1/role`)
                 .send({
                     role: 'UNKNOW ROLE',
                 });
-            console.log(JSON.parse(req.text));
             expect(req.status).to.equal(400);
             const data = JSON.parse(req.text);
-            console.log(data);
             expect(data?.message).to.equal('Validation failed: role: UNKNOW ROLE is not supported as user role');
         });
-    })
+    });
+    describe('find user by id', () => {
+        it('find a existing user', async() => {
+            const req = await agent(server)
+                .get('/users/1/');
+            expect(req.status).to.equal(200);
+            const data = JSON.parse(req.text);
+            console.log(data);
+            expect(data['_id']).to.equal(1);
+            expect(data['email']).to.equal('user0');
+            expect(data['name']).to.equal('name-user0');
+            expect(data['firstname']).to.equal('firstname-user0');
+            expect(data['location']).to.equal('Toronto');
+            expect(data['apple_user_id']).to.equal(null);
+            expect(data['role']).to.equal('ADMIN');
+            expect(data['password']).to.equal(null);
+        });
+        it('search for an unexistant user', async() => {
+            const req = await agent(server)
+                .get('/users/45392/');
+                console.log(JSON.parse(req.text));
+                expect(req.status).to.equal(403);
+            const data = JSON.parse(req.text);
+            expect(data['error']).to.equal('No such user');
+        });
+    });
 });

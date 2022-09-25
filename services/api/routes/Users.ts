@@ -228,4 +228,22 @@ router.patch('/:user_id/role', async (req, res) => {
     }
 });
 
+router.get('/:user_id', async (req, res) => {
+    try {
+        const user_to_find = await Helpers.Users.find_user_by_id(req.params.user_id);
+        if (!user_to_find){
+            res.status(403).json({
+                error: 'No such user'
+            });
+        } else {
+            res.status(200).json(user_to_find);
+        }
+    } catch(e) {
+        console.error(e);
+        res.status(400).json({
+            error: e,
+        });
+    }
+});
+
 module.exports = router;

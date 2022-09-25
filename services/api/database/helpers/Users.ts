@@ -77,8 +77,10 @@ const add_player_id_with_apple = async(apple_user_id: string, player_id: string)
 
 const find_user_by_id = async(user_id: string): Promise<InterfaceUsers> => {
     const user_to_find = await Schema.Users.findOne({
-        user_id: user_id,
+        _id: user_id,
     });
+    if (user_to_find)
+        user_to_find.password = null;
     return (user_to_find);
 }
 
