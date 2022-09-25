@@ -3,18 +3,19 @@ import InterfaceUsers from "../../Interfaces/User";
 const bcrypt = require('bcryptjs');
 const saltRounds = 10;
 
-const create_users = async(email: string, password: string, name: string, firstname: string, location: string, apple_user_id: string = ''): Promise<InterfaceUsers | boolean> => {
+const create_users = async(user_id: string, email: string, password: string, name: string, firstname: string, location: string, apple_user_id: string = ''): Promise<InterfaceUsers | boolean> => {
     try {
         const hash = await bcrypt.hashSync(password, saltRounds);
         const create = await new Schema.Users({
+            _id: user_id || null,
             email: email,
             password: hash,
             name: name,
             firstname: firstname,
             location: location,
-            apple_user_id: apple_user_id,
+            apple_user_id: apple_user_id || null,
             created_at: Date.now(),
-            role: 'user',
+            role: 'USER',
         }).save();
         if (!create) {
             throw new Error('Cannot create users');
@@ -100,8 +101,13 @@ const update_role_user = async(user_id: string, role: string): Promise<Interface
         role: role,
     }, {
         new: true,
+        runValidators: true,
     });
     return (user_to_update);
+}
+
+const delete_all_users = async(): Promise<void> => {
+    await Schema.Users.deleteMany({});
 }
 
 export default {
@@ -114,4 +120,5 @@ export default {
     find_user_by_apple_user_id,
     add_player_id_with_apple,
     update_role_user,
+    delete_all_users,
 }

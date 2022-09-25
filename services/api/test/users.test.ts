@@ -40,4 +40,29 @@ describe("/users", () => {
             expect(res['password']).to.equal(undefined);
         });
     });
+    describe('test user role update', () => {
+        it('test that user role can be updated', async() => {
+            const req = await agent(server)
+                .patch(`/users/1/role`)
+                .send({
+                    role: 'ADMIN',
+                });
+            expect(req.status).to.equal(200);
+            const data = JSON.parse(req.text);
+            expect(data['_id']).to.equal(1);
+            expect(data['role']).to.equal('ADMIN');
+        });
+        it('test that user role can be updated', async() => {
+            const req = await agent(server)
+                .patch(`/users/1/role`)
+                .send({
+                    role: 'UNKNOW ROLE',
+                });
+            console.log(JSON.parse(req.text));
+            expect(req.status).to.equal(400);
+            const data = JSON.parse(req.text);
+            console.log(data);
+            expect(data?.message).to.equal('Validation failed: role: UNKNOW ROLE is not supported as user role');
+        });
+    })
 });

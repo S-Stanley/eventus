@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
 const UserSchema = mongoose.Schema({
+    _id: {
+        type: Number,
+        require: false,
+    },
     email: {
         type: String,
         require: true,
@@ -32,13 +36,16 @@ const UserSchema = mongoose.Schema({
     apple_user_id: {
         type: String,
         require: false,
-        default: '',
-        unique: true,
+        unique: false
     },
     role: {
         type: String,
         require: true,
-        default: 'user',
+        default: 'USER',
+        enum: {
+            values: ['ADMIN', 'USER'],
+            message: '{VALUE} is not supported as user role',
+        },
     },
 });
 
