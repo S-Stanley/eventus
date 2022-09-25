@@ -6,7 +6,10 @@
   "scripts": {
     "start": "npx nodemon server.ts",
     "build": "tsc",
-    "test": "mocha -r ts-node/register test/**/*.test.ts --exit",
+    "test": "cd ../../ && bash scripts/insert-fixture.sh && cd - && mocha -r ts-node/register test/**/*.test.ts --exit",
+    "test:users": "cd ../../ && bash scripts/insert-fixture.sh && cd - && mocha -r ts-node/register test/users.test.ts --exit",
+    "test:events": "cd ../../ && bash scripts/insert-fixture.sh && cd - && mocha -r ts-node/register test/events.test.ts --exit",
+    "test:activities": "cd ../../ && bash scripts/insert-fixture.sh && cd - && mocha -r ts-node/register test/activities.test.ts --exit",
     "doc": "node ./swagger.js",
     "prod": "node build/server.js"
   },

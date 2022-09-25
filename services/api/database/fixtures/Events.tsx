@@ -53,7 +53,7 @@ const get_host_by_name = async(host_name: string): Promise<HostInterface> => {
     return (event);
 }
 
-mongoose.connect(process.env.MONGO_URI ?? 'mongodb://127.0.0.1:27017/').then(async() => {
+mongoose.connect('mongodb://127.0.0.1:27017/').then(async() => {
     await delete_all_events();
     await insert_events(
         'Tennis a Neuilly',

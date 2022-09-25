@@ -5,9 +5,9 @@ const swaggerAutogen = require('swagger-autogen')();
 const router = express.Router();
 
 import Helpers from "../database/helpers/Helpers";
-import Utils from '../utils/Utils'
+import Utils from '../utils/Utils';
 
-router.post('/', async(req : { body: { email: string, password: string, name: string, firstname: string, location: string} }, res) => {
+router.post('/', async(req : { body: { user_id?: string, email: string, password: string, name: string, firstname: string, location: string} }, res) => {
     try {
         if (!Utils.Requests.verifParams(req.body, ['email', 'password'])){
             res.status(422).json({
@@ -24,6 +24,7 @@ router.post('/', async(req : { body: { email: string, password: string, name: st
                 }
             } else {
                 const create = await Helpers.Users.create_users(
+                    req.body.user_id ?? null,
                     req.body.email,
                     req.body.password,
                     req.body.name,
@@ -56,6 +57,7 @@ router.post('/auth/gmail', async (req, res) => {
                 res.status(200).json(user_to_find);
             } else {
                 const user_created = await Helpers.Users.create_users(
+                    req.body.user_id ?? null,
                     req.body.email,
                     '',
                     req.body.name,
@@ -203,6 +205,40 @@ router.post('/password/new/validate', async (req, res) => {
             res.status(200).json(true);
         }
     } catch (e) {
+        console.error(e);
+        res.status(400).json({
+            error: e,
+        });
+    }
+});
+
+router.patch('/:user_id/role', async (req, res) => {
+    try {
+        if (!Utils.Requests.verifParams(req.body, ['role'])){
+            res.status(422).json({
+                error: 'Missing parameter',
+            });
+        } else {
+            const update = await Helpers.Users.update_role_user(req.params.user_id, req.body.role);
+            res.status(200).json(update);
+        }
+    } catch(e) {
+        console.error(e);
+        res.status(400).json(e);
+    }
+});
+
+router.get('/:user_id', async (req, res) => {
+    try {
+        const user_to_find = await Helpers.Users.find_user_by_id(req.params.user_id);
+        if (!user_to_find){
+            res.status(403).json({
+                error: 'No such user'
+            });
+        } else {
+            res.status(200).json(user_to_find);
+        }
+    } catch(e) {
         console.error(e);
         res.status(400).json({
             error: e,

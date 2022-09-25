@@ -14,7 +14,7 @@ const insert_activity = async(name: string) => {
     }).save();
 }
 
-mongoose.connect(process.env.MONGO_URI ?? 'mongodb://127.0.0.1:27017/').then(async() => {
+mongoose.connect('mongodb://127.0.0.1:27017/').then(async() => {
     await delete_all_events();
     await insert_activity('Tennis');
     await insert_activity('Basket');
